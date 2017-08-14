@@ -19,9 +19,11 @@ var Models = require('./app/backend/models')
 var MongoStore = require('connect-mongo')(session)
 var User = Models.User;
 var connect = process.env.MONGODB_URI
+var expressValidator = require('express-validator')
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
+app.use(expressValidator());
 const port = 3000;
 
 const compiler = webpack(config);
@@ -72,7 +74,7 @@ app.post('/form1', function(req, res) {
         email: data.email,
         civilStatus: data.civilStatus,
     }).save((user) => {
-        console.log("User successfuly saved.");
+        console.log("User successfully saved.");
         return user
     })
     .then((returnedUser) => {

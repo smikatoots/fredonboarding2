@@ -5,6 +5,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter, Link } from 'react-router-dom';
 import axios from 'axios';
+import Validation from 'react-validation';
+import validator from 'validator';
 
 // must change to FormContainer later
 
@@ -17,15 +19,17 @@ class AppContainer extends React.Component {
             middleName: '',
             gender: '',
             tin: '',
-            countryOfBirth: '',
-            countryOfResidence: '',
-            countryOfCitizenship: '',
-            telephoneNumber: '',
-            mobileNumber: '',
-            email: '',
-            civilStatus: ''
+            errors: {},
+            isNotEmpty: true
         };
     }
+
+    onClick = (event) => {
+        event.preventDefault();
+        this.setState({
+            errors: this.form.validateAll()
+        });
+    };
 
     handleNewTextChange(event, item) {
         const key = item;
@@ -35,80 +39,75 @@ class AppContainer extends React.Component {
         this.setState(obj);
     }
 
-    handleFormSubmit() {
-        const self = this;
-        axios.post('http://localhost:3000/form1', {
-            data: this.state
-        })
-        .then(function(response) {
-            console.log('did we receive from server? ', response);
-        })
-        .catch((err) => {
-            console.log('Error!', err);
-        });
+    handlePostRequest() {
+        console.log(this.state.errors);
+        if (Object.keys(this.state.errors).length === 0) {
+            axios.post('http://localhost:3000/form1', {
+                data: this.state
+            })
+            .then(function(response) {
+                console.log('did we receive from server? ', response);
+                // ADD "NEXT PAGE" METHOD HERE
+            })
+            .catch((err) => {
+                console.log('Error!', err);
+            });
+        }
+    }
+
+    handleFormSubmit = (event) => {
+        event.preventDefault();
+        this.setState({
+            errors: this.form.validateAll()
+        }, () => this.handlePostRequest());
     }
 
     render() {
-        console.log(this.state);
         return (
             <div>
-                Last Name: <input
-                    type="text"
-                    onChange={(event) => this.handleNewTextChange(event, 'lastName')}
-                    value={this.state.lastName}
-                    placeholder="Last Name"/><br/>
-                First Name: <input
-                    type="text"
-                    onChange={(event) => this.handleNewTextChange(event, 'firstName')}
-                    value={this.state.firstName}
-                    placeholder="First Name"/><br/>
-                Middle Name: <input
-                    type="text"
-                    onChange={(event) => this.handleNewTextChange(event, 'middleName')}
-                    value={this.state.middleName}
-                    placeholder="Middle Name"/><br/>
-                Gender: <input
-                    type="text"
-                    onChange={(event) => this.handleNewTextChange(event, 'gender')}
-                    value={this.state.gender}
-                    placeholder="Gender"/><br/>
-                TIN #: <input
-                    type="text"
-                    onChange={(event) => this.handleNewTextChange(event, 'tin')}
-                    value={this.state.tin}
-                    placeholder="TIN #"/><br/>
-                Country of Birth: <input
-                    type="text"
-                    onChange={(event) => this.handleNewTextChange(event, 'countryOfBirth')}
-                    value={this.state.countryOfBirth}
-                    placeholder="Country of Birth"/><br/>
-                Country of Residence: <input
-                    type="text"
-                    onChange={(event) => this.handleNewTextChange(event, 'countryOfResidence')}
-                    value={this.state.countryOfResidence}
-                    placeholder="Country of Residence"/><br/>
-                Country of Citizenship: <input
-                    type="text"
-                    onChange={(event) => this.handleNewTextChange(event, 'countryOfCitizenship')}
-                    value={this.state.countryOfCitizenship}
-                    placeholder="Country of Citizenship"/><br/>
-                Telephone Number: <input
-                    type="text"
-                    onChange={(event) => this.handleNewTextChange(event, 'telephoneNumber')}
-                    value={this.state.telephoneNumber}
-                    placeholder="Telephone Number"/><br/>
-                Mobile Number: <input
-                    type="text"
-                    onChange={(event) => this.handleNewTextChange(event, 'mobileNumber')}
-                    value={this.state.mobileNumber}
-                    placeholder="Mobile Number"/><br/>
-                Civil Status: <input
-                    type="text"
-                    onChange={(event) => this.handleNewTextChange(event, 'civilStatus')}
-                    value={this.state.civilStatus}
-                    placeholder="Civil Status"/><br/>
-                {/* {this.state} */}
-                <button type="button" onClick={() => this.handleFormSubmit()}>Submit Form</button><br/>
+                <Validation.components.Form ref={(c) => {this.form = c;}}>
+                    Last Name: <Validation.components.Input
+                        type="text"
+                        validations={['required']}
+                        onChange={(event) => this.handleNewTextChange(event, 'lastName')}
+                        value=""
+                        name="lastName"
+                        placeholder="Last Name"/><br/>
+                    First Name: <Validation.components.Input
+                        type="text"
+                        validations={['required']}
+                        onChange={(event) => this.handleNewTextChange(event, 'firstName')}
+                        value=""
+                        name="firstName"
+                        placeholder="First Name"/><br/>
+                    Middle Name: <Validation.components.Input
+                        type="text"
+                        validations={['required']}
+                        onChange={(event) => this.handleNewTextChange(event, 'middleName')}
+                        value=""
+                        name="middleName"
+                        placeholder="Middle Name"/><br/>
+                    Gender: <Validation.components.Input
+                        type="text"
+                        validations={['required']}
+                        onChange={(event) => this.handleNewTextChange(event, 'gender')}
+                        value=""
+                        name="gender"
+                        placeholder="Gender"/><br/>
+                    TIN #: <Validation.components.Input
+                        type="text"
+                        validations={['required']}
+                        onChange={(event) => this.handleNewTextChange(event, 'tin')}
+                        value=""
+                        name="tin"
+                        placeholder="TIN #"/><br/>
+                    <button className="button" onClick={this.onClick}>Show errors model (validateAll)</button>
+                    <div>Errors model: {JSON.stringify(this.state.errors)}</div>
+                    { !this.state.isNotEmpty ?
+                        <button disabled>Submit</button> :
+                        <button type="button" onClick={this.handleFormSubmit}>Submit</button>
+                    }
+                </Validation.components.Form>
             </div>
         );
     }

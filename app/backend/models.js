@@ -18,27 +18,27 @@ var UsersSchema = schema({
     tin: {
         type: String
     },
-    countryOfBirth: {
-        type: String
-    },
-    countryOfResidence: {
-        type: String
-    },
-    countryOfCitizenship: {
-        type: String
-    },
-    telephoneNumber: {
-        type: String
-    },
-    mobileNumber: {
-        type: String
-    },
-    email: {
-        type: String
-    },
-    civilStatus: {
-        type: String
-    },
+    // countryOfBirth: {
+    //     type: String
+    // },
+    // countryOfResidence: {
+    //     type: String
+    // },
+    // countryOfCitizenship: {
+    //     type: String
+    // },
+    // telephoneNumber: {
+    //     type: String
+    // },
+    // mobileNumber: {
+    //     type: String
+    // },
+    // email: {
+    //     type: String
+    // },
+    // civilStatus: {
+    //     type: String
+    // },
 })
 
 var User = mongoose.model('User', UsersSchema);
