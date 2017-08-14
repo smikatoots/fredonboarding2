@@ -82,6 +82,19 @@ app.post('/form1', function(req, res) {
     })
 })
 
+app.post('/print', function(req, res) {
+    var tempId = "59912f01c922c78bff0a9a54";
+    User.findById(tempId, (err, user) => {
+        if (err) {
+          console.log('Error in finding document', tempId)
+        }
+        else {
+          console.log('Document found', tempId, user);
+          res.json(user);
+        }
+    })
+})
+
 app.listen(port, 'localhost', function onStart(err) {
   if (err) {
     console.log(err);

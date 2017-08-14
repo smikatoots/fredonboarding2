@@ -3,6 +3,7 @@ import React from 'react';
 import { Provider } from 'react-redux';
 import { Route } from 'react-router-dom';
 import { ConnectedRouter } from 'react-router-redux';
+import App from '../components/App';
 
 import AppContainer from '../containers/AppContainer';
 

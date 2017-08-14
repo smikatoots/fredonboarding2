@@ -4,9 +4,11 @@ import App from '../components/App';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter, Link } from 'react-router-dom';
+import { Redirect } from 'react-router';
 import axios from 'axios';
 import Validation from 'react-validation';
 import validator from 'validator';
+import Routes from '../routes';
 
 // must change to FormContainer later
 
@@ -20,7 +22,8 @@ class AppContainer extends React.Component {
             gender: '',
             tin: '',
             errors: {},
-            isNotEmpty: true
+            isNotEmpty: true,
+            redirect: false
         };
     }
 
@@ -41,12 +44,14 @@ class AppContainer extends React.Component {
 
     handlePostRequest() {
         console.log(this.state.errors);
+        const self = this;
         if (Object.keys(this.state.errors).length === 0) {
             axios.post('http://localhost:3000/form1', {
                 data: this.state
             })
             .then(function(response) {
                 console.log('did we receive from server? ', response);
+                self.setState({redirect: true});
                 // ADD "NEXT PAGE" METHOD HERE
             })
             .catch((err) => {
@@ -63,8 +68,10 @@ class AppContainer extends React.Component {
     }
 
     render() {
+        if (this.state.redirect) return <Redirect to="/form2" />;
         return (
             <div>
+                <Link to="/form2">Form 2</Link>
                 <Validation.components.Form ref={(c) => {this.form = c;}}>
                     Last Name: <Validation.components.Input
                         type="text"
