@@ -1,13 +1,15 @@
 {
-  "name": "hangman",
+  "name": "fredonboarding",
   "version": "1.0.0",
-  "description": "redux hangman toy app",
+  "description": "Onboarding mechanism for Freddie",
   "main": "index.js",
   "scripts": {
     "test": "",
     "start": "node server",
     "build": "rimraf dist && webpack --config ./webpack.production.config.js --progress --profile --colors",
-    "eslint": "eslint ."
+    "eslint": "eslint .",
+    "devServer": "nodemon --watch backend server.js",
+    "server": "node server.js"
   },
   "keywords": [
     "es6",
@@ -17,7 +19,15 @@
   "author": "Ricky Sharma",
   "license": "MIT",
   "dependencies": {
+    "axios": "^0.16.2",
+    "body-parser": "^1.17.2",
+    "connect-mongo": "^1.3.2",
+    "cookie-parser": "^1.4.3",
+    "express-session": "^1.15.5",
+    "express-validator": "^3.2.1",
     "file-loader": "^0.9.0",
+    "jspdf": "file:jspdf",
+    "mongoose": "^4.11.6",
     "prop-types": "^15.5.9",
     "react": "^15.0.2",
     "react-dom": "^15.0.2",
@@ -25,7 +35,9 @@
     "react-redux": "^4.4.5",
     "react-router-dom": "^4.1.1",
     "react-router-redux": "next",
-    "redux": "^3.5.2"
+    "redux": "^3.5.2",
+    "webpack-dev-middleware": "^1.12.0",
+    "webpack-hot-middleware": "^2.18.2"
   },
   "devDependencies": {
     "autoprefixer": "^6.3.6",
